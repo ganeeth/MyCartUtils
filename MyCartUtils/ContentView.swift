@@ -20,6 +20,7 @@ struct ItemData : Identifiable, Equatable {
 import SwiftUI
 
 struct ContentView: View {
+    
     @State var loanedItems : [ItemData] = []
     @State var availableItems : [ItemData] = [ItemData.init(itemStatus: 1, name: "Gray Coat Wool", rating: 4.3, size: "XL", price: 199, imageName: "1", customerName:                          "Alice Ray", duration: "27 Apr to 05 May"),
                                               ItemData.init(itemStatus: 0, name: "Slim Dress", rating: 4.6, size: "XL", price: 299, imageName: "2", customerName: nil, duration:nil),
@@ -93,7 +94,7 @@ struct ContentView: View {
                                     .font(.custom("OpenSans-Bold", size: 20))
                                 
                                 ScrollView(.vertical,showsIndicators: false){
-                                    ForEach(Array(self.loanedItems.enumerated()), id: \.offset){index, item in
+                                    ForEach(self.loanedItems){item in
                                         LoanedItemView(item: item, contentController: self.contentController)
                                             .highPriorityGesture(DragGesture()
                                                                     .onEnded({ (value) in
@@ -101,8 +102,8 @@ struct ContentView: View {
                                                                             print("right")
                                                                             self.availableItems.append(item)
                                                                             while self.loanedItems.contains(item) {
-                                                                                if let itemToRemoveIndex = loanedItems.firstIndex(of: item) {
-                                                                                    loanedItems.remove(at: itemToRemoveIndex)
+                                                                                if let index = loanedItems.firstIndex(of: item) {
+                                                                                    loanedItems.remove(at: index)
                                                                                 }
                                                                             }
                                                                         }
@@ -121,7 +122,7 @@ struct ContentView: View {
                                     .frame(width: UIScreen.main.bounds.width, alignment: .leading)
                                     .font(.custom("OpenSans-Bold", size: 20))
                                 ScrollView(.vertical,showsIndicators: false){
-                                    ForEach(Array(self.availableItems.enumerated()), id: \.offset){index, item in
+                                    ForEach(self.availableItems){item in
                                         AvailableItemView(item: item, contentController: self.contentController)
                                             .highPriorityGesture(DragGesture()
                                                                     .onEnded({ (value) in
@@ -129,8 +130,8 @@ struct ContentView: View {
                                                                             print("left")
                                                                             self.loanedItems.append(item)
                                                                             while self.availableItems.contains(item) {
-                                                                                if let itemToRemoveIndex = availableItems.firstIndex(of: item) {
-                                                                                    self.availableItems.remove(at: itemToRemoveIndex)
+                                                                                if let index = availableItems.firstIndex(of: item) {
+                                                                                    self.availableItems.remove(at: index)
                                                                                 }
                                                                             }
                                                                         }
